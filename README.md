@@ -8,7 +8,7 @@ You need `python3` and Firefox pre-installed.
 
 Then
 ```shell
-pip3 -r requirements.txt
+pip3 install -r requirements.txt
 ```
 
 ## Usage
