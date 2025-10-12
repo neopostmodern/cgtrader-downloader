@@ -9,6 +9,7 @@ from selenium.common.exceptions import (
 )
 import uuid
 
+from config import VERBOSE
 from disposable_mail import GuerrillaMail
 from util import random_string
 
@@ -130,29 +131,32 @@ class AccountManager:
                     """const iframe = document.getElementById('credential_picker_container'); if (iframe) { iframe.parentNode.removeChild(iframe); }"""
                 )
 
-                user_element = self.driver.find_element("css selector", ".user")
+                user_element = self.driver.find_element("css selector", "#user-register-action")
                 user_element.click()
                 self.driver.implicitly_wait(5)
 
-                self.driver.find_element(
-                    "css selector", ".auth-tabs li:nth-child(2)"
-                ).click()
-                self.driver.implicitly_wait(5)
+                # self.driver.find_element(
+                #     "css selector", ".auth-tabs li:nth-child(2)"
+                # ).click()
+                # self.driver.implicitly_wait(5)
                 # refresh link to dom element
 
+                # self.driver.find_element(
+                #     "css selector",
+                #     "#regsiter-username-top-menu-old-layout",  # sic: regsiter
+                # ).send_keys(account["username"])
+                # sleep(1)
                 self.driver.find_element(
-                    "css selector",
-                    "#regsiter-username-top-menu-old-layout",  # sic: regsiter
-                ).send_keys(account["username"])
-                sleep(1)
-                self.driver.find_element(
-                    "css selector", "#register-email-top-menu-old-layout"
+                    "css selector", "#email-top-menu-old-layout"
                 ).send_keys(account["email"])
                 sleep(1)
                 self.driver.find_element(
-                    "css selector", "#register-password-top-menu-old-layout"
+                    "css selector", "#password-top-menu-old-layout"
                 ).send_keys(account["password"])
                 sleep(3)
+
+                # todo: check if captcha is solved -- '#mtcap-msg-1' must contain text "Verified Successfully"
+
                 self.driver.find_element("css selector", "#register-for-submit").click()
 
                 sleep(5)
@@ -161,7 +165,11 @@ class AccountManager:
             # except ElementClickInterceptedException as intercepted:
             #     print("intercepted!")
             except (NoSuchElementException, ElementNotInteractableException) as e:
-                print("*", end="", flush=True)
+                if VERBOSE:
+                    print(e)
+                else:
+                    print("*", end="", flush=True)
+
                 sleep(1)
 
         print()
