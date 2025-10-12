@@ -7,7 +7,7 @@ from time import sleep
 import pathlib
 from glob import glob
 
-from config import MODELS_BASE_PATH, MODELS_TMP_PATH, OVERRIDE, AUTO_RESTART
+from config import MODELS_BASE_PATH, MODELS_TMP_PATH, OVERRIDE, AUTO_RESTART, VERBOSE
 from cgtrader_accounts import AccountManager
 from selenium_provider import get_driver
 from util import generate_file_list, download_files
@@ -116,7 +116,29 @@ License: {entry['info']['license']}
 
 
 if __name__ == "__main__":
-    urls = sys.argv[1:]
+    args = sys.argv[1:]
+    verbose = False
+    urls = []
+    for arg in args:
+        if arg == '-v' or arg == '--verbose':
+            print(f"Change verbosity settings through config.json (currently set to {VERBOSE}).")
+            exit(1)
+
+        if arg == '-?' or arg == '-h' or arg == '--help':
+            print(f"No built-in help yet, check the README.md file or read the source-code of main.py file.")
+            exit(1)
+
+        if arg.startswith('https://www.cgtrader.com/'):
+            urls.append(arg)
+            continue
+
+        print("WARNING - Unknown arg (ignoring):", arg)
+        exit(1)
+
+    if len(urls) == 0:
+        print("No URLs passed, exiting.")
+        exit(0)
+
     print(f"Downloading models from {len(urls)} URLs.")
 
     if AUTO_RESTART:

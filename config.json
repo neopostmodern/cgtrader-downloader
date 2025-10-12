@@ -1,5 +1,6 @@
 {
   "modelsBasePath": "models",
   "override": false,
-  "autoRestart": false
+  "autoRestart": false,
+  "verbose": true
 }
